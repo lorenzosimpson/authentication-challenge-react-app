@@ -4,7 +4,7 @@ import { axiosWithAuth } from '../utils/axiosWithAuth'
 function Jokes(props) {
     const [jokes, setJokes] = useState([])
 
-    useEffect(() => {
+    useEffect( async () => {
         axiosWithAuth()
         .get('/jokes')
         .then(res => {
@@ -13,12 +13,18 @@ function Jokes(props) {
         })
         .catch(err => console.log(err))
     }, [])
+
+    let token = localStorage.getItem('token')
     return (
         <div>
             <h1>Jokes</h1>
-            {jokes.map(joke => (
-                <p key={joke.id}>{joke.joke}</p>
-            ))
+            {
+               token ? 
+                jokes.map(joke => (
+                    <p key={joke.id}>{joke.joke}</p>
+                ))
+            :
+                window.alert('Must be logged in!')
             }
         </div>
     )
